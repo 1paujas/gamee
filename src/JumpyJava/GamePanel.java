@@ -11,10 +11,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 public class GamePanel extends JPanel implements Runnable, KeyListener {
-
-
-    int positionMin = 900;
-    int positionMax = 3800;
+    int lives = 3;
 
     // Create an instance of your Player
     Player player;
@@ -58,6 +55,12 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
     private void update() {
         player.update();
 
+        for (Block block : blocks) {
+            boolean intersects = block.intersects(player);
+            if (intersects) {
+                System.out.println("Collision Detected");
+            }
+        }
 
         BlockGenerator.blockGen();
 

@@ -23,4 +23,11 @@ public class Block extends GameObject {
     public void update() {
         x -= speed;
     }
+
+    public boolean intersects(Player other) {
+        return this.x < other.x + other.width &&
+                this.x + this.width > other.x &&
+                this.y < other.y + other.height &&
+                this.y + this.height > other.y;
+    }
 }
