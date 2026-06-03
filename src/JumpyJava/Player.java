@@ -77,4 +77,12 @@ public class Player extends GameObject implements KeyListener {
 
     @Override
     public void keyTyped(KeyEvent e) {}
+
+    public boolean playerOffscreen(int panelHeight) {
+        // Check top and bottom boundaries
+        boolean offTop    = (this.y + this.height < 0);
+        boolean offBottom = (this.y > panelHeight + 100);
+
+        return offTop || offBottom;
+    }
 }

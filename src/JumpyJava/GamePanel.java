@@ -11,7 +11,8 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 public class GamePanel extends JPanel implements Runnable, KeyListener {
-    int lives = 3;
+    static int lives = 5;
+    static boolean liveCooldown = false;
 
     // Create an instance of your Player
     Player player;
@@ -34,9 +35,19 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
         gameThread.start();
     }
 
+    public static void liveCooldown() {
+        ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+
+        scheduler.scheduleAtFixedRate(() -> {
+            liveCooldown = false;
+        }, 0, 2, TimeUnit.SECONDS);
+    }
+
     @Override
     public void run() {
         BlockGenerator.cooldownHandler();
+        liveCooldown();
+        lives = 5;
 
         while (true) {
             update();
@@ -58,7 +69,18 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
         for (Block block : blocks) {
             boolean intersects = block.intersects(player);
             if (intersects) {
-                System.out.println("Collision Detected");
+                if (!liveCooldown) {
+                    liveCooldown = true;
+                    lives--;
+                }
+            }
+        }
+
+        if (player.playerOffscreen(this.getHeight())) {
+            player.y = 300;
+            if (!liveCooldown) {
+                liveCooldown = true;
+                lives--;
             }
         }
 
@@ -76,8 +98,13 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
         draw(g);
     }
 
+
+
     private void draw(Graphics g) {
         player.draw(g);
+
+        g.setColor(Color.BLACK);
+        g.drawString(("Lives: "+String.valueOf(lives)), 20, 20);
         for (Block block : blocks) {
             block.draw(g);
         }
