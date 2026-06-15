@@ -54,6 +54,7 @@ public class BlockGenerator {
                 cooldown = true;
                 //int xPos = rand.nextInt((positionMax - positionMin) + 1) + positionMin;
 
+                GamePanel.score++;
 
                 int xPos = 900;
                 boolean yPos = rand.nextBoolean();
