@@ -1,9 +1,13 @@
 package JumpyJava;
 
+import javax.imageio.ImageIO;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
 public class Player extends GameObject implements KeyListener {
     boolean arrowMode = false;
@@ -13,6 +17,7 @@ public class Player extends GameObject implements KeyListener {
     double velY = 0;
     double gravity = 0.1;
     double jumpSpeed = -4;
+    private BufferedImage image;
 
     public Player(int x, int y, int width, int height) {
         super(x, y, width, height);
@@ -26,7 +31,7 @@ public class Player extends GameObject implements KeyListener {
             velY += gravity;
             y += velY;
 
-            // Jumping logic (example)
+            // Jumping logic
             if (spacePressed) {
                 velY = jumpSpeed;
             }
@@ -41,8 +46,22 @@ public class Player extends GameObject implements KeyListener {
         }
     }
     public void draw(Graphics g) {
-        g.setColor(Color.BLUE); // Change color so you can see it against a background
-        g.fillRect(x, (int)y, width, height);
+        imageHandler();
+
+        if (image != null) {
+            g.drawImage(image, x, (int) y, this.width, this.height, null);
+        } else {
+            g.setColor(Color.BLUE); // Change color so you can see it against a background
+            g.fillRect(x, (int)y, width, height);
+        }
+    }
+
+    public void imageHandler() {
+        try {
+            image = ImageIO.read(new File("res/player.png"));
+        } catch(IOException e) {
+            System.err.println("Error player loading image");
+        }
     }
 
     @Override
