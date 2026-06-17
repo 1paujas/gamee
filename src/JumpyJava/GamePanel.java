@@ -16,6 +16,9 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
     static boolean liveCooldown = false;
     static boolean alive = true;
 
+    LagFreeSound touchSound = new LagFreeSound("res/touch-soundeffect.wav");
+    LagFreeSound loseSound = new LagFreeSound("res/lose-soundeffect.wav");
+
     // Create an instance of your Player
     Player player;
     public static ArrayList<Block> blocks = new ArrayList<Block>();
@@ -96,6 +99,7 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
                     if (!liveCooldown) {
                         liveCooldown = true;
                         lives--;
+                        touchSound.play();
                     }
                 }
             }
@@ -110,6 +114,7 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 
             if (lives <= 0) {
                 alive = false;
+                loseSound.play();
                 tryAgainButton.setVisible(true);
             }
 
